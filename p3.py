@@ -9,6 +9,7 @@ end_of_game = None  # set if the user wins or ends the game
 buzzerPWM = None
 accuracyPWN = None
 currentGuess = None
+value = None
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -34,7 +35,7 @@ def welcome():
 
 # Print the game menu
 def menu():
-    global end_of_game
+    global end_of_game, value
     option = input("Select an option:   H - View High Scores     P - Play Game       Q - Quit\n")
     option = option.upper()
     if option == "H":
@@ -159,16 +160,33 @@ def accuracy_leds():
     # - The % brightness should be directly proportional to the % "closeness"
     # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%
     # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%
+
+    global guess, value
+    cycle = int(((8-(abs(value-guessed))/8)*100))
+    if GPIO.input(LED_accuracy):
+        accuracyPWN.ChangeDutyCycle(int((abs(value-guessed)/)))
+    else:
+        accuracyPWN.start(int((abs(value-guessed)/)))
     pass
 
 # Sound Buzzer
-def trigger_buzzer():
+def trigger_buzzer(absoluteValue):
     # The buzzer operates differently from the LED
     # While we want the brightness of the LED to change(duty cycle), we want the frequency of the buzzer to change
     # The buzzer duty cycle should be left at 50%
     # If the user is off by an absolute value of 3, the buzzer should sound once every second
     # If the user is off by an absolute value of 2, the buzzer should sound twice every second
     # If the user is off by an absolute value of 1, the buzzer should sound 4 times a second
+
+    if !(GPIO.input(buzzer)):
+        buzzer.start(50)
+
+    if (absoluteValue == 3):
+        buzzer.ChangeFrequency(1)
+    elif (absoluteValue == 2):
+        buzzer.ChangeFrequency(2)
+    elif (absoluteValue ==1):
+        buzzer.ChangeFrequency(4)
     pass
 
 
