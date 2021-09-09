@@ -77,7 +77,7 @@ def display_scores(count, raw_data):
 def setup():
     global LED_value,LED_accuracy,buzzer,LED_accuracy,buzzerPWM,accuracyPWN
     # Setup board mode
-    GPIO.setMode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BOARD)
 
     # Setup regular GPIO
     GPIO.setup(LED_value[0], GPIO.OUT)    
