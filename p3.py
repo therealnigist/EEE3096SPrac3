@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import random
 import ES2EEPROMUtils
 import os
+import time
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
@@ -10,8 +11,9 @@ buzzerPWM = None
 accuracyPWN = None
 currentGuess = None
 value = None
-score = None
-name = None
+score = 0
+name = ""
+option = ""
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -25,7 +27,7 @@ eeprom = ES2EEPROMUtils.ES2EEPROM()
 # Print the game banner
 def welcome():
     os.system('clear')
-    print("  _   _                 _                  _____ _            __  __ _")
+    print(" _   _                 _                  _____ _            __  __ _")
     print("| \ | |               | |                / ____| |          / _|/ _| |")
     print("|  \| |_   _ _ __ ___ | |__   ___ _ __  | (___ | |__  _   _| |_| |_| | ___ ")
     print("| . ` | | | | '_ ` _ \| '_ \ / _ \ '__|  \___ \| '_ \| | | |  _|  _| |/ _ \\")
@@ -37,7 +39,7 @@ def welcome():
 
 # Print the game menu
 def menu():
-    global end_of_game, value
+    global end_of_game, value, option
     option = input("Select an option:   H - View High Scores     P - Play Game       Q - Quit\n")
     option = option.upper()
     if option == "H":
@@ -89,8 +91,8 @@ def setup():
     accuracyPWN = GPIO.PWM(LED_accuracy, 60)
 
     # Setup debouncing and callbacks
-    GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed, bouncetime = 250)
-    GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback = btn_increase_pressed, bouncetime = 250)
+    GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed, bouncetime = 200)
+    GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback = btn_increase_pressed, bouncetime = 200)
     
     pass
 
@@ -165,6 +167,49 @@ def btn_guess_pressed(channel):
     # - add the new score
     # - sort the scores
     # - Store the scores back to the EEPROM, being sure to update the score count
+    global value, currentGuess, end_of_game, option, name, LED_value, buzzer, LED_accuracy, buzzerPWM, accuracyPWN, score
+
+    if (option == "p"):
+        timeTaken = time.time()
+
+        while (GPIO.input(channel) == 0):
+            pass
+        
+        timeTaken = time.time() - timeTaken
+
+        if (timeTaken <= 2):
+            if guess == value:
+                GPIO.output(LED_value[0],0)
+                GPIO.output(LED_value[1],0)
+                GPIO.output(LED_value[2],0)
+                GPIO.output(buzzer,0)
+                GPIO.output(LED_accuracy,0)
+                buzzerPWM.stop()
+                accuracyPWN.stop()
+                print("YOU GOT IT RIGHT!!!")
+                print("Your Score is " + score)
+                while (len(name) < 3):
+                    name = input("Enter a three letter username")
+                print("Your score has been saved")
+                save_scores()
+                currentGuess = None
+                score = 0
+                value = None
+                option = ""
+                name = ""
+                end_of_game = True
+            else:
+                score += 1
+                accuracy_leds()
+                trigger_buzzer()
+        else:
+            currentGuess = None
+            score = 0
+            value = None
+            option = ""
+            name = ""
+            end_of_game = True
+
     pass
 
 
