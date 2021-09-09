@@ -14,6 +14,7 @@ btn_submit = 16
 btn_increase = 18
 buzzer = None
 eeprom = ES2EEPROMUtils.ES2EEPROM()
+guess = 0
 
 
 # Print the game banner
@@ -73,11 +74,20 @@ def setup():
 # Load high scores
 def fetch_scores():
     # get however many scores there are
-    score_count = None
+    score_count = eeprom.read_byte(0)
+    num_regs = score_count*4
     # Get the scores
-    
+    data = eeprom.read_block(0,num_regs)
+    scores = []
     # convert the codes back to ascii
-    
+    name = ""
+    count = 0
+    for i in range(data):
+        if (count+1)%4 != 0:
+            name += chr(data[i])
+        else:
+            scores.append(name, data[i])
+            name = ""
     # return back the results
     return score_count, scores
 
@@ -85,6 +95,9 @@ def fetch_scores():
 # Save high scores
 def save_scores():
     # fetch scores
+    old_scores = fetch_scores
+    number_of_scores = old_scores[0]
+
     # include new score
     # sort
     # update total amount of scores
