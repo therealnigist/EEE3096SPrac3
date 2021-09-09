@@ -8,6 +8,7 @@ import os
 end_of_game = None  # set if the user wins or ends the game
 buzzerPWM = None
 accuracyPWN = None
+currentGuess = None
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -123,6 +124,16 @@ def btn_increase_pressed(channel):
     # Increase the value shown on the LEDs
     # You can choose to have a global variable store the user's current guess, 
     # or just pull the value off the LEDs when a user makes a guess
+
+    global currentGuess
+    if currentGuess == 7:
+        currentGuess = 0
+    else:
+        currentGuess += 1
+    temp = bin(guess) + ""
+    GPIO.output(LED_value[0], int(temp[-1]))
+    GPIO.output(LED_value[1], int(temp[-2]))
+    GPIO.output(LED_value[2], int(temp[-3]))
     pass
 
 
