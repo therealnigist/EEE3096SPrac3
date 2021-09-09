@@ -242,12 +242,12 @@ def accuracy_leds():
     # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%
     # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%
 
-    global guess, value
-    cycle = int(((8-(abs(value-guessed))/8)*100))
+    global currentGuess, value
+    cycle = int(((8-(abs(value-currentGuess))/8)*100))
     if GPIO.input(LED_accuracy):
-        accuracyPWN.ChangeDutyCycle(int((abs(value-guessed)/)))
+        accuracyPWN.ChangeDutyCycle(int((abs(value-currentGuess))))
     else:
-        accuracyPWN.start(int((abs(value-guessed)/)))
+        accuracyPWN.start(int((abs(value-currentGuess))))
     pass
 
 # Sound Buzzer
@@ -258,8 +258,8 @@ def trigger_buzzer(absoluteValue):
     # If the user is off by an absolute value of 3, the buzzer should sound once every second
     # If the user is off by an absolute value of 2, the buzzer should sound twice every second
     # If the user is off by an absolute value of 1, the buzzer should sound 4 times a second
-
-    if !(GPIO.input(buzzer)):
+    global buzzer
+    if (GPIO.input(buzzer)):
         buzzer.start(50)
 
     if (absoluteValue == 3):
