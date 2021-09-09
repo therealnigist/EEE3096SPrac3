@@ -65,12 +65,16 @@ def menu():
 
 def display_scores(count, raw_data):
     # print the scores to the screen in the expected format
-    print("There are {} scores. Here are the top 3!".format(count))
+    displayCount = count
+    if (count > 3):
+        displayCount = 3
+    print("There are {} scores. Here are the top {}!".format(count,displayCount))
     # print out the scores in the required format
     if (count != 0):
-        print("1 - " + raw_data[0][0] + " took " + raw_data[0][1] + " guesses")
-        print("2 - " + raw_data[1][0] + " took " + raw_data[1][1] + " guesses")
-        print("3 - " + raw_data[2][0] + " took " + raw_data[2][1] + " guesses")
+        for i in range(count):
+            print(i + " - " + raw_data[0][0] + " took " + raw_data[0][1] + " guesses")
+            if (i == 2):
+                break
     else:
         print("There are no high scores saved yet.")
     pass
@@ -115,7 +119,7 @@ def fetch_scores():
     # convert the codes back to ascii
     name = ""
     #count = 0
-    for i in range(data):
+    for i in range(len(data)):
         if (i+1)%4 != 0:
             name += chr(data[i])
         else:
