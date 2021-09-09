@@ -72,7 +72,7 @@ def display_scores(count, raw_data):
     # print out the scores in the required format
     if (count != 0):
         for i in range(count):
-            print("{} - {} took {} guesses".format(i,raw_data[0][0],raw_data[0][1]))
+            print("{} - {} took {} guesses".format(i+1,raw_data[0][0],raw_data[0][1]))
             if (i == 2):
                 break
     else:
