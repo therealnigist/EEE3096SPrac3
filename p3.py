@@ -10,6 +10,8 @@ buzzerPWM = None
 accuracyPWN = None
 currentGuess = None
 value = None
+score = None
+name = None
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -18,7 +20,6 @@ btn_submit = 16
 btn_increase = 18
 buzzer = 33
 eeprom = ES2EEPROMUtils.ES2EEPROM()
-guess = 0
 
 
 # Print the game banner
