@@ -55,6 +55,7 @@ def menu():
         value = generate_number()
         while not end_of_game:
             pass
+        end_of_game = False
     elif option == "Q":
         print("Come back soon!")
         exit()
@@ -66,6 +67,9 @@ def display_scores(count, raw_data):
     # print the scores to the screen in the expected format
     print("There are {} scores. Here are the top 3!".format(count))
     # print out the scores in the required format
+    print("1 - " + raw_data[0][0] + " took " + raw_data[0][1] + " guesses")
+    print("2 - " + raw_data[1][0] + " took " + raw_data[1][1] + " guesses")
+    print("3 - " + raw_data[2][0] + " took " + raw_data[2][1] + " guesses")
     pass
 
 
