@@ -6,13 +6,15 @@ import os
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
+buzzerPWM = None
+accuracyPWN = None
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
 LED_accuracy = 32
 btn_submit = 16
 btn_increase = 18
-buzzer = None
+buzzer = 33
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
 
@@ -63,10 +65,29 @@ def display_scores(count, raw_data):
 
 # Setup Pins
 def setup():
+    global LED_value,LED_accuracy,buzzer,LED_accuracy,buzzerPWM,accuracyPWN
     # Setup board mode
+    GPIO.setMode(GPIO.BOARD)
+
     # Setup regular GPIO
+    GPIO.setup(LED_value[0], GPIO.OUT)    
+    GPIO.setup(LED_value[1], GPIO.OUT)
+    GPIO.setup(LED_value[2], GPIO.OUT)
+
+    GPIO.setup(LED_accuracy, GPIO.OUT)
+    GPIO.setup(buzzer, GPIO.OUT)  
+
+    GPIO.setup(btn_submit, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+    GPIO.setup(btn_increase, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+
     # Setup PWM channels
+    buzzerPWM = GPIO.PWM(buzzer, 0.1)
+    accuracyPWN = GPIO.PWM(LED_accuracy, 60)
+
     # Setup debouncing and callbacks
+    GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed, bouncetime = 250)
+    GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback = btn_increase_pressed, bouncetime = 250)
+    
     pass
 
 
