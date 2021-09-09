@@ -107,16 +107,17 @@ def fetch_scores():
     score_count = eeprom.read_byte(0)
     num_regs = score_count*4
     # Get the scores
-    data = eeprom.read_block(0,num_regs)
+    data = eeprom.read_block(1,num_regs)
     scores = []
     # convert the codes back to ascii
     name = ""
-    count = 0
+    #count = 0
     for i in range(data):
-        if (count+1)%4 != 0:
+        if (i+1)%4 != 0:
             name += chr(data[i])
         else:
-            scores.append(name, data[i])
+            tup = (name, data[i])
+            scores.append(tup)
             name = ""
     # return back the results
     return score_count, scores
@@ -125,14 +126,31 @@ def fetch_scores():
 # Save high scores
 def save_scores():
     # fetch scores
-    old_scores = fetch_scores
-    number_of_scores = old_scores[0]
+    number_of_scores, scores = fetch_scores()
+    global name
+    global score
+    scores.append(name, score)
+    scores.sort(reverse=False, key=myFunc)
+    #name_bin = []
+    data = []
+    eeprom.clear()
+    for i in range(scores):
+        name_list = list(scores[i][0])
+        for j in range(3):
+            data.append(ord(name_list[j]))
+        data.append(scores[i][1])
+    eeprom.write_byte(0, number_of_scores+1)
+    eeprom.write_block(1, data)
+
 
     # include new score
     # sort
     # update total amount of scores
     # write new scores
     pass
+
+def myFunc(tup):
+    return tup[1]
 
 
 # Generate guess number
