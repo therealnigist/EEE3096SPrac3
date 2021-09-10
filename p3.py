@@ -243,7 +243,7 @@ def btn_guess_pressed(channel):
                 print("YOU GOT IT RIGHT!!!")
                 print("The answer was: {}".format(value))
                 print("Your Score is {}".format(score))
-                while (len(name) < 3):
+                while (len(name) != 3):
                     name = input("Enter a three letter username\n")
                 print("Saving...")
                 save_scores()
