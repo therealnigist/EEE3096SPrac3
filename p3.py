@@ -113,7 +113,7 @@ def setup():
 
     # Setup PWM channels
     buzzerPWM = GPIO.PWM(buzzer, 0.1)
-    accuracyPWN = GPIO.PWM(LED_accuracy, 60)
+    accuracyPWN = GPIO.PWM(LED_accuracy, 200)
 
     # Setup debouncing and callbacks
     GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed, bouncetime = 300)
