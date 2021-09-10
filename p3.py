@@ -113,7 +113,7 @@ def setup():
 
     # Setup PWM channels
     buzzerPWM = GPIO.PWM(buzzer, 0.1)
-    accuracyPWN = GPIO.PWM(LED_accuracy, 200)
+    accuracyPWN = GPIO.PWM(LED_accuracy, 500)
 
     # Setup debouncing and callbacks
     GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed, bouncetime = 300)
@@ -278,7 +278,7 @@ def accuracy_leds():
     # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%
 
     global currentGuess, value, accuracyPWN
-    cycle = int(((8-(abs(value-currentGuess)))/8)*100)
+    cycle = int(((8-(abs(value-currentGuess)))/8)*50)
     if GPIO.input(LED_accuracy):
         accuracyPWN.ChangeDutyCycle(cycle)
     else:
