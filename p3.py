@@ -260,6 +260,13 @@ def btn_guess_pressed(channel):
                 accuracy_leds()
                 trigger_buzzer(abs(value-currentGuess))
         else:
+            GPIO.output(LED_value[0],0)
+            GPIO.output(LED_value[1],0)
+            GPIO.output(LED_value[2],0)
+            GPIO.output(buzzer,0)
+            GPIO.output(LED_accuracy,0)
+            buzzerPWM.stop()
+            accuracyPWN.stop()
             currentGuess = 0
             score = 1
             value = None
