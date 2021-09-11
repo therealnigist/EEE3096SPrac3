@@ -160,7 +160,7 @@ def save_scores():
     global score
     tup = (name,score)
     scores.append(tup)
-    scores.sort(reverse=False, key=myFunc)
+    scores.sort(reverse=False, key=tup[1])
     #name_bin = []
     data = []
     eeprom.clear(2048)
@@ -178,10 +178,6 @@ def save_scores():
     # update total amount of scores
     # write new scores
     pass
-
-def myFunc(tup):
-    return tup[1]
-
 
 # Generate guess number
 def generate_number():
